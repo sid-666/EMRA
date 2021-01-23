@@ -5,7 +5,10 @@ module.exports = {
   create: function(req, res) {
     db.Transaction
       .create(req.body)
-      .then(dbModel => res.json(dbModel))
+      .then(({ _id }) => db.User.findOneAndUpdate({}, { $push: { transaction: _id } }, { new: true }))
+      .then(dbUser => {
+        res.json(dbUser);
+      })
       .catch(err => res.status(422).json(err));
   },
   update: function(req, res) {
