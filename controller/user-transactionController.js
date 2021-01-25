@@ -3,13 +3,16 @@ const db = require("../models");
 // Defining methods for the booksController
 module.exports = {
   create: function(req, res) {
-    db.Transaction
+    if(req.user){
+      let user = req.user
+      db.Transaction
       .create(req.body)
-      .then(({ _id }) => db.User.findOneAndUpdate({}, { $push: { transaction: _id } }, { new: true }))
+      .then(({ _id }) => db.User.findOneAndUpdate({"_id": user}, { $push: { transaction: _id } }, { new: true }))
       .then(dbUser => {
         res.json(dbUser);
       })
       .catch(err => res.status(422).json(err));
+    }
   },
   update: function(req, res) {
     db.Transaction
