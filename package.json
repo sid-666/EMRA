@@ -1,5 +1,5 @@
 {
-    "name": "Transaction",
+    "name": "Transaction app",
     "version": "1.0.0",
     "description": "Transaction",
     "main": "server.js",
