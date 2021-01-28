@@ -1,6 +1,4 @@
-  
 import React, { useState } from "react";
-import "./App.css";
 import Axios from "axios";
 
 function App() {
@@ -17,7 +15,7 @@ function App() {
         password: registerPassword,
       },
       withCredentials: true,
-      url: "http://localhost:4000/register",
+      url: "http://localhost:3001/api/auth/register",
     }).then((res) => console.log(res));
   };
   const login = () => {
@@ -28,19 +26,35 @@ function App() {
         password: loginPassword,
       },
       withCredentials: true,
-      url: "http://localhost:4000/login",
-    }).then((res) => console.log(res));
+      url: "http://localhost:3001/api/auth/login",
+    }).then((res) => {
+      console.log(res)
+      setLoginPassword("")
+      setLoginUsername("")
+
+    });
   };
+  const logout = () => {
+    Axios({
+      method: "GET",
+      withCredentials: true,
+      url: "http://localhost:3001/api/auth/logout",
+    }).then((res) => {
+      console.log(res)
+    })
+  }
   const getUser = () => {
     Axios({
       method: "GET",
       withCredentials: true,
-      url: "http://localhost:4000/user",
+      url: "http://localhost:3001/api/auth/user",
     }).then((res) => {
       setData(res.data);
-      console.log(res.data);
     });
   };
+  // useEffect(() => {
+  //   getUser()
+  // }, [data])
   return (
     <div className="App">
       <div>
@@ -60,19 +74,22 @@ function App() {
         <h1>Login</h1>
         <input
           placeholder="username"
+          value = {loginUsername}
           onChange={(e) => setLoginUsername(e.target.value)}
         />
         <input
+          type="password"
           placeholder="password"
+          value={loginPassword}
           onChange={(e) => setLoginPassword(e.target.value)}
         />
         <button onClick={login}>Submit</button>
       </div>
-
+      <button onClick={logout}>Logout</button>
       <div>
         <h1>Get User</h1>
         <button onClick={getUser}>Submit</button>
-        {data ? <h1>Welcome Back {data.username}</h1> : null}
+        {data ? <h1>Welcome Back {data.name} {data.transaction}</h1> : null}
       </div>
     </div>
   );
