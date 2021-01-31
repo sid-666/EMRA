@@ -44,20 +44,13 @@ app.use(flash());
 require("./config/passport")(passport);
 
 app.use(router);
-mongoose.connect(
-    process.env.MONGODB_URI,
-    {
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-        useCreateIndex: true,
-        useFindAndModify: false
-    }
-);
 
 app.get("*", function (req, res) {
     res.sendFile(path.join(__dirname, "./client/build/index.html"));
 })
 const httpServer = http.createServer(app);
-httpServer.listen(PORT, function () {
-    console.log(`🌎 ==> API server now on port ${PORT}!`);
+db.sequelize.sync().then(function () {
+    httpServer.listen(PORT, function () {
+        console.log(`🌎 ==> API server now on port ${PORT}!`);
+    });
 });
