@@ -6,9 +6,11 @@ module.exports = {
     console.log(req.user)
     if(req.user){
       let user = req.user
-      db.Transaction
-      .create(req.body)
-      .then(({ _id }) => db.User.findOneAndUpdate({"_id": user}, { $push: { transaction: _id } }, { new: true }))
+      db.sequelize.query(`
+      INSERT INTO Transactions (type, name, value, createdAt, updatedAt, user_id) 
+      VALUES (${req.body.type}, ${req.body.name}, ${req.body.value},NOW(), NOW(), ${user.id});`, {
+          type: sequelize.QueryTypes.INSERT
+      })
       .then(dbUser => {
         res.json(dbUser);
       })
@@ -16,16 +18,23 @@ module.exports = {
     }
   },
   update: function(req, res) {
-    db.Transaction
-      .findOneAndUpdate({ _id: req.params.id }, req.body)
-      .then(dbModel => res.json(dbModel))
-      .catch(err => res.status(422).json(err));
+    db.sequelize.query(`
+    UPDATE Transactions
+    SET 
+        type = ${req.body.type}, 
+        name = ${req.body.name},
+        value = ${req.body.value}
+    WHERE _id = ${req.params.id};`, {
+        type: sequelize.QueryTypes.UPDATE
+    }).then(function(data) {
+        res.json(data)
+    })
   },
   remove: function(req, res) {
     db.Transaction
-      .findById({ _id: req.params.id })
-      .then(dbModel => dbModel.remove())
-      .then(dbModel => res.json(dbModel))
-      .catch(err => res.status(422).json(err));
+      .destroy({where: {_id: req.params.id}})
+      .then(data => {
+        res.json(data)
+      })
   }
 };

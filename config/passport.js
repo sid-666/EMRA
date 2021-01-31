@@ -1,35 +1,38 @@
-const { User } = require("../model/index");
+const { User } = require("../model");
 const bcrypt = require("bcryptjs");
 const localStrategy = require("passport-local").Strategy;
 
 module.exports = function (passport) {
     passport.use(
         new localStrategy((username, password, done) => {
-            User.findOne({ name: username }, (err, user) => {
-                if (err) throw err;
-                if (!user) return done(null, false);
-                bcrypt.compare(password, user.password, (err, result) => {
-                    if (err) throw err;
-                    if (result === true) {
-                        return done(null, user);
-                    } else {
-                        return done(null, false);
-                    }
-                });
-            });
+            User.findOne({
+                where: {
+                    username: username
+                }
+            }).then(function(dbUser) {
+                // If there's no user with the given email
+                if (!dbUser) {
+                    return done(null, false, {
+                        message: "Incorrect username."
+                    });
+                }
+                // If there is a user with the given email, but the password the user gives us is incorrect
+                else if (!dbUser.validPassword(password)) {
+                    return done(null, false, {
+                        message: "Incorrect password."
+                    });
+                }
+                // If none of the above, return the user
+                return done(null, dbUser);
+            });           
         })
     );
 
-    passport.serializeUser((user, cb) => {
-        cb(null, user.id);
+    passport.serializeUser(function(user, cb) {
+        cb(null, user);
     });
-    passport.deserializeUser((id, cb) => {
-        User.findOne({ _id: id }, (err, user) => {
-            const userInformation = {
-                username: user.name,
-                trnasaction: user.trnasaction
-            };
-            cb(err, userInformation);
-        });
+    
+    passport.deserializeUser(function(obj, cb) {
+        cb(null, obj);
     });
 };

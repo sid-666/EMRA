@@ -1,30 +1,25 @@
-const mongoose = require("mongoose");
 
-const Schema = mongoose.Schema;
-
-const transactionSchema = new Schema(
-    {
+module.exports = function(sequelize, DataTypes) {
+    var Transactions = sequelize.define("Transactions", {
         type: {
-            type: String,
-            trim: true,
-            required: "Enter transaction type"
+            type: DataTypes.STRING,
+            allowNull: false,
+            validate: {
+                len: [1]
+            }
         },
         name: {
-            type: String,
-            trim: true,
-            required: "Enter a name for transaction"
+            type: DataTypes.TEXT,
         },
         value: {
-            type: Number,
-            required: "Enter an amount"
-        },
-        date: {
-            type: Date,
-            default: Date.now
+            type: DataTypes.FLOAT
         }
-    }
-);
+    });
 
-const Transaction = mongoose.model("Transaction", transactionSchema);
+    Transactions.associate = function(models) {
+        Transactions.belongsTo(models.User)
+    };
 
-module.exports = Transaction;
+    return Transactions;
+
+};
