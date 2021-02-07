@@ -1,25 +1,52 @@
 import React from "react";
 import "./style.css";
 
+
 const SearchForm = props => {
+    // const [category, setCategory] = useState("")
+    // const [options, setOptions] = useState([])
+    // const handleCategoryInput = (event) => {
+    //     setCategory(event.target)
+    // }
+    // const handleSubmitCategory = (event) => {
+    //     event.preventDefault();
+    //     setOptions(options.push(category))
+    // }
     return (
-        <form>
-            <div className="form-group">
-                <label className="BookSearchLabel"><h3>Search For Book</h3></label>
-                <br></br>
-                <input className="col-12 form-control"
-                    value={props.search}
-                    type="text"
-                    name="searchBook"
-                    placeholder="Enter Book's Name"
-                    onChange={props.handleInputValue}
-                />
+        <form onSubmit={props.submitForm}>
+            <div className="row">
+                <div className="large-12 columns">
+                    <label>Name
+                        <input value={props.name} onChange={props.setName} type="text" placeholder="large-12.columns" />
+                    </label>
+                </div>
             </div>
-            <button type="submit" className="submitBtn btn btn-primary" onClick={props.handleFormSubmit}>
-                Submit
-            </button>
+            <div className="row">
+                <div className="large-10 columns">
+                    <label>Select Category
+                        <input value={props.type} onChange={props.setType} placeholder="type" type="text" />
+                    </label>
+                    <button>Add New Category</button>
+                </div>
+                <div className="large-2 columns">
+                    <label> Amount
+                        <input onChange={props.setAmount} type="text" placeholder="large-4.columns" />
+                    </label>
+                </div>
+            </div>
+            {/* <div className = "row">
+                <div className="large-10 columns">
+                    <label> New Category
+                        <input onChange = {handleCategoryInput} type="text" placeholder="large-12.columns" />
+                    </label>
+                    <button onClick = {handleSubmitCategory}>Add Category</button>
+                </div>               
+            </div> */}
+            <button >Submit</button>
         </form>
     )
+
+
 }
 
 

@@ -1,20 +1,17 @@
 require('dotenv').config();
 const path = require('path')
-const mongoose = require("mongoose");
 const express = require("express");
 const cors = require("cors");
 const passport = require("passport");
-const passportLocal = require("passport-local").Strategy;
 const cookieParser = require("cookie-parser");
-const bcrypt = require("bcryptjs");
 const http = require("http");
 const session = require("express-session");
 const flash = require('connect-flash');
 const bodyParser = require("body-parser");
 const app = express();
-const User = require("./model/users");
 const PORT = process.env.PORT || 3001;
 const router = require("./routes")
+const db = require("./model")
 //----------------------------------------- END OF IMPORTS---------------------------------------------------
 
 

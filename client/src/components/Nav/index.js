@@ -1,22 +1,35 @@
-import React from "react";
+import React, {useContext} from "react";
+import { Link } from "react-router-dom";
+import AuthContext from "../../context/AuthContext";
+import LogoutBtn from "../LogoutBtn"
 
 function Nav() {
+    const { loggedIn } = useContext(AuthContext);
     return (
-        <nav className="navbar navbar-expand-lg navbar-primary bg-primary">
-            <a className="navbar-brand" href="/">
-                <h2 className="text-white">Google Book Search</h2>
-            </a>
-            <div id="navbarNav">
-                <ul className="navbar-nav">
-                    <li className="nav-item" id="home">
-                        <a className="nav-link" href="/"><button type="button" className="btn btn-info text-white">Search Books</button></a>
-                    </li>
-                    <li className="nav-item" id="report">
-                        <a className="nav-link" href="/saved"><button type="button" className="btn btn-warning text-white">Saved Books</button></a>
-                    </li>
+        <div className = "top-bar">
+            <div className = "top-bar-left">
+                <ul className = "horizontal-menu">
+                    <li className = "menu-text"><Link to = "/home">TransactionApp</Link></li>
                 </ul>
             </div>
-        </nav>
+            <div className = "top-bar-right">
+                <ul className = "horizontal-menu">
+                    {loggedIn === false && (
+                        <>
+                        <li><Link to = "/login">Login</Link></li>
+                        <li><Link to = "/register">Register</Link></li>
+                        </>
+                    )}
+                    {loggedIn === true && (
+                        <>
+                        <li><Link to = "/dashboard">Dashboard</Link></li>
+                        <li><Link to = "/transaction">Save</Link></li>
+                        <li><LogoutBtn></LogoutBtn></li>
+                        </>
+                    )}
+                </ul>
+            </div>
+        </div>
     );
 }
 
