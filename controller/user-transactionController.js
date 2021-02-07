@@ -1,23 +1,26 @@
 const db = require("../model");
+const sequelize = require("sequelize");
 
 // Defining methods for the booksController
 module.exports = {
-  create: function(req, res) {
+  create: function (req, res) {
     console.log(req.user)
-    if(req.user){
-      let user = req.user
-      db.sequelize.query(`
-      INSERT INTO Transactions (type, name, value, createdAt, updatedAt, user_id) 
-      VALUES (${req.body.type}, ${req.body.name}, ${req.body.value},NOW(), NOW(), ${user.id});`, {
-          type: sequelize.QueryTypes.INSERT
-      })
+    db.Transactions.create({
+      type: req.body.type,
+      name: req.body.name,
+      value: req.body.value,
+      user_id: req.user.id
+    })
       .then(dbUser => {
         res.json(dbUser);
       })
-      .catch(err => res.status(422).json(err));
-    }
+      .catch(err => {
+        res.status(422).json(err)
+        console.log(err)
+      });
+
   },
-  update: function(req, res) {
+  update: function (req, res) {
     db.sequelize.query(`
     UPDATE Transactions
     SET 
@@ -25,14 +28,14 @@ module.exports = {
         name = ${req.body.name},
         value = ${req.body.value}
     WHERE _id = ${req.params.id};`, {
-        type: sequelize.QueryTypes.UPDATE
-    }).then(function(data) {
-        res.json(data)
+      type: sequelize.QueryTypes.UPDATE
+    }).then(function (data) {
+      res.json(data)
     })
   },
-  remove: function(req, res) {
+  remove: function (req, res) {
     db.Transaction
-      .destroy({where: {_id: req.params.id}})
+      .destroy({ where: { _id: req.params.id } })
       .then(data => {
         res.json(data)
       })
