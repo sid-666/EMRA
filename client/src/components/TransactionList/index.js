@@ -1,5 +1,3 @@
-import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
 import { Paper, IconButton } from '@material-ui/core'
 import { Edit, Delete } from '@material-ui/icons'
 // import GridList from '@material-ui/core/GridList';
@@ -48,28 +46,29 @@ const useStyles = makeStyles((theme) => ({
  *   },
  * ];
  */
-export default function TransactionList() {
+export default function TransactionList(props) {
     const classes = useStyles();
 
     return (
         <div className={classes.gridList}>
             <div>
-                {top100Films.map((item) => {
+                {props.data.map((item) => {
 
                     return (
                         <>
                             <Paper className={classes.transactionPaper} elevation={6}>
                                 <div className="row" style={{ padding: '10px' }}>
-                                    <div className="columns small-3 large-3" contentEditable style={{ padding: '3px' }}>2020-03-5</div>
-                                    <div className="columns small-3 large-3" contentEditable style={{ padding: '3px' }}>Joe sug</div>
-                                    <div className="columns small-2 large-2" contentEditable style={{ padding: '3px' }}>$400</div>
+                                    <div className="columns small-3 large-2" style={{ padding: '3px' }}>{item.date}</div>
+                                    <div className="columns small-1 large-3" onChange={props.onChange} contentEditable style={{ padding: '3px' }}>{item.type}</div>
+                                    <div className="columns small-3 large-3" onChange={props.onChange} contentEditable style={{ padding: '3px' }}>{item.name}</div>
+                                    <div className="columns small-1 large-2" onChange={props.onChange} contentEditable style={{ padding: '3px' }}>{item.amount}</div>
                                     < div className="columns small-2 large-2" >
-                                        <IconButton>
+                                        <IconButton onClick={props.submitupdate}>
                                             <Edit />
                                         </IconButton>
                                     </div>
                                     <div className="columns small-2 end large-2">
-                                        <IconButton>
+                                        <IconButton onClick={props.submitupdate}>
                                             <Delete />
                                         </IconButton>
                                     </div>

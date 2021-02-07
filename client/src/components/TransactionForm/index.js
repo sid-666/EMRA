@@ -21,7 +21,7 @@ const useStyles = makeStyles((theme) => ({
     }
 
 }));
-const TransactionForm = () => {
+const TransactionForm = (props) => {
     const classes = useStyles();
 
     return (
@@ -30,6 +30,7 @@ const TransactionForm = () => {
             <strong><h1 className={classes.headerFont}>Transaction Input</h1></strong>
             <div className={classes.breaks} />
             <TextField
+                onChange = {props.onChange}
                 style={{ width: '80%', height: '60px' }}
                 className={classes.inputArea}
                 variant="outlined"
@@ -39,8 +40,9 @@ const TransactionForm = () => {
                 InputProps={{
                     endAdornment: (
                         <datalist id="category">
-                            <option value="XAXX010101000"></option>
-                            <option value="XEXX010101000"></option>
+                            {props.data.map((item)=>{
+                                return(<option value={item.type}>{item.type}</option>)
+                            })}
                         </datalist>
                     ),
                     inputProps: {
@@ -49,6 +51,7 @@ const TransactionForm = () => {
                 }}
             />
             <TextField
+                onChange = {props.onChange}
                 style={{ width: '80%', height: '60px' }}
                 className={classes.inputArea}
                 label="Name"
@@ -57,6 +60,7 @@ const TransactionForm = () => {
             <div className={classes.breaks}></div>
 
             <TextField
+                onChange = {props.onChange}
                 style={{ width: '80%', height: '60px' }}
                 label="Amount"
                 id="outlined-start-adornment"
@@ -66,7 +70,7 @@ const TransactionForm = () => {
                 variant="outlined"
             />
             <div className={classes.breaks}></div>
-            <Button label="Submit" variant='contained' color='primary' className={classes.button} onClick={e => this.onSubmit(e)} >
+            <Button label="Submit" variant='contained' color='primary' className={classes.button} onClick={props.submitForm} >
                 Submit
             </Button>
         </form>
