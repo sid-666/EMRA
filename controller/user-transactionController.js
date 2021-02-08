@@ -34,8 +34,11 @@ module.exports = {
     })
   },
   remove: function (req, res) {
-    db.Transaction
-      .destroy({ where: { _id: req.params.id } })
+    console.log("hi", req.params.id)
+    console.log(typeof req.params.id)
+    console.log(parseInt(req.params.id))
+    db.Transactions
+      .destroy({ where: { id: parseInt(req.params.id) } })
       .then(data => {
         res.json(data)
       })

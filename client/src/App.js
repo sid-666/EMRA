@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import AuthContext from "./context/AuthContext";
 import { BrowserRouter, Switch, Route } from "react-router-dom";
-import Nav from "./components/Nav"
+import Navbar from "./components/Nav"
 import Login from "./pages/login"
 import Register from "./pages/register"
 import Transaction from "./pages/transactioninput"
@@ -12,7 +12,7 @@ function App() {
   const { loggedIn } = useContext(AuthContext);
   return (
     <BrowserRouter>
-      <Nav />
+      <Navbar />
       <Switch>
         <Route exact path="/">
           <Home />

@@ -23,44 +23,34 @@ const useStyles = makeStyles((theme) => ({
 }));
 const TransactionForm = (props) => {
     const classes = useStyles();
-
+    console.log(props)
     return (
-        <form style={{ padding: "5px" }} className={classes.root}>
+        <form style={{ padding: "5px" }} className={classes.root} >
 
             <strong><h1 className={classes.headerFont}>Transaction Input</h1></strong>
             <div className={classes.breaks} />
+
             <TextField
-                onChange = {props.onChange}
+                onChange={props.setType}
                 style={{ width: '80%', height: '60px' }}
                 className={classes.inputArea}
-                variant="outlined"
-                name="category"
-                size={'small'}
                 label="Category"
-                InputProps={{
-                    endAdornment: (
-                        <datalist id="category">
-                            {props.data.map((item)=>{
-                                return(<option value={item.type}>{item.type}</option>)
-                            })}
-                        </datalist>
-                    ),
-                    inputProps: {
-                        list: "rfc"
-                    }
-                }}
+                variant="outlined"
             />
+            {/* {props.data.map((item) => {
+                return (<p value={item.type}>{item.type}</p>)
+            })} */}
             <TextField
-                onChange = {props.onChange}
+                onChange={props.setName}
                 style={{ width: '80%', height: '60px' }}
                 className={classes.inputArea}
                 label="Name"
                 variant="outlined"
             />
             <div className={classes.breaks}></div>
-
+            <div className={classes.breaks}></div>
             <TextField
-                onChange = {props.onChange}
+                onChange={props.setAmount}
                 style={{ width: '80%', height: '60px' }}
                 label="Amount"
                 id="outlined-start-adornment"

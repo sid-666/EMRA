@@ -1,0 +1,22 @@
+
+@media only screen and (max-width: 600px){
+    canvas{
+        padding:inherit !important;
+        max-width: 500px !important;
+        max-height: 500px !important;
+    }
+}
+@media only screen and (max-width: 400px){
+    canvas{
+        padding:inherit !important;
+        max-width: 220px !important;
+        max-height: 220px !important;
+    }
+}
+@media only screen and (max-width: 300px){
+    canvas{
+        padding-top:200px !important;
+        max-width: 400px !important;
+        max-height: 220px !important;
+    }
+}

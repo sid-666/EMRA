@@ -1,9 +1,11 @@
-import React, {useState, useEffect} from "react";
+import React, { useState, useEffect, useContext } from "react";
 // import { makeStyles } from "@material-ui/core/styles"
 import { makeStyles, createStyles } from '@material-ui/core/styles';
 import { Grid, Paper } from "@material-ui/core";
 import TransactionList from "../components/TransactionList"
-import TransactionForm from "../components/TransactionForm";
+import TransactionForm from "../components/SearchForm";
+import Axios from 'axios'
+import DataContext from "../context/UserTransactionData"
 // import DataGrid from "../components/DataGrid"
 
 const useStyles = makeStyles((theme) =>
@@ -33,76 +35,57 @@ const useStyles = makeStyles((theme) =>
 
 const TransactionPage = () => {
     const { changeFalseStatus } = useContext(DataContext)
-    const [transactionData, setTransactionData] = useState({})
-    const [postObject, setPostObject] = useState({})
-    const [updateObject, setUpdateObject] = useState({})
+    const [transactionData, setTransactionData] = useState([])
+    // const [postObject, setPostObject] = useState({})
+    const [type, setType] = useState("")
+    const [name, setName] = useState("")
+    const [amount, setAmount] = useState("")
     const classes = useStyles()
 
-    function handlePostInputChange(event) {
-        const { name, value } = event.target;
-        setPostObject({...formObject, [name]: value})
-     };
 
-    function handleUpdateChange(event) {
-        const { name, value } = event.target;
-        setUpdateObject({...formObject, [name]: value})
-    };
     const uploadTransaction = (e) => {
         e.preventDefault()
-        if(postObject.type && postObject.name && postObject.amount){
-            Axios({
-                method: "POST",
-                data: {
-                    type: postObject.type,
-                    name: postObject.name,
-                    value: postObject.amount
-                },
-                withCredentials: true,
-                url: "http://localhost:3001/api/auth/transaction",
-            }).then(res => {
-                console.log(res)
-                changeFalseStatus();
-            })
-        }
+        Axios({
+            method: "POST",
+            data: {
+                type: type,
+                name: name,
+                value: amount
+            },
+            withCredentials: true,
+            url: "http://localhost:3001/api/auth/transaction",
+        }).then(res => {
+            console.log(res)
+            loadData()
+            changeFalseStatus();
+        })
+
     }
     const loadData = () => {
+        console.log("I am here in LoadData")
         Axios({
             method: "GET",
             withCredentials: true,
             url: "http://localhost:3001/api/auth/transaction",
         }).then(res => {
             console.log(res)
-            setTransactionData(res)
+            setTransactionData(res.data)
         })
     }
     const deleteData = (id) => {
+        console.log(typeof id)
         Axios({
             method: "DELETE",
             withCredentials: true,
-            url: "http://localhost:3001/api/auth/transaction/" + id,
+            url: `http://localhost:3001/api/auth/transaction/${id}`,
         }).then(res => {
             console.log(res)
             loadData()
         })
     }
-    const updateData = (id) => {
-        if(updateObject.type || updateObject.name || updateObject.amount){
-            Axios({
-                method: "PUT",
-                data: {
-                    type: updateObject.type,
-                    name: updateObject.name,
-                    value: updateObject.value
-                },
-                withCredentials: true,
-                url: "http://localhost:3001/api/auth/transaction/"+id,
-            }).then(res => {
-                console.log(res)
-                loadData()
-            })
-        }
-    }
+
     useEffect(() => {
+        console.log("I am here")
         loadData();
     }, [])
     return (
@@ -113,8 +96,10 @@ const TransactionPage = () => {
                         <div className={classes.divScroller}>
                             <TransactionForm
                                 data={transactionData}
-                                onChange={handlePostInputChange}
-                                submitForm={uploadTransaction} 
+                                setType={(e) => setType(e.target.value)}
+                                setName={(e) => setName(e.target.value)}
+                                setAmount={(e) => setAmount(e.target.value)}
+                                submitForm={uploadTransaction}
                             />
                         </div>
 
@@ -124,9 +109,7 @@ const TransactionPage = () => {
                     <Paper className={classes.paper} elevation={6} >
                         <TransactionList
                             data={transactionData}
-                            onChange= {handleUpdateChange}
-                            submitupdate={()=>updateData(item._id)} 
-                            submitdelete = {()=>deleteData(item._id)}
+                            submitdelete={deleteData}
                         />
                     </Paper>
                 </Grid>

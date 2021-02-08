@@ -1,4 +1,5 @@
 import React from "react";
+import './style.css'
 import { Bar, Line, Pie, Doughnut, HorizontalBar } from 'react-chartjs-2';
 export function BarChart(props) {
     console.log(props.data)
@@ -6,6 +7,8 @@ export function BarChart(props) {
         <div className="barChart">
             <Bar
                 data={props.data}
+                width={400}
+                height={250}
                 options={{
                     maintianAspectRatio: false
                 }}
@@ -20,8 +23,16 @@ export function LineChart(props) {
         <div className="barChart">
             <Line
                 data={props.data}
+                width={400}
+                height={250}
                 options={{
-                    maintianAspectRatio: false
+                    maintianAspectRatio: false,
+                    responsive: true,
+                    scales: {
+                        xAxes: [{
+                            display: false
+                        }]
+                    }
                 }}
             />
         </div>
@@ -34,6 +45,8 @@ export function PieChart(props) {
         <div className="barChart">
             <Pie
                 data={props.data}
+                width={400}
+                height={250}
                 options={{
                     maintianAspectRatio: false
                 }}
@@ -48,6 +61,8 @@ export function DoughnutChart(props) {
         <div className="barChart">
             <Doughnut
                 data={props.data}
+                width={400}
+                height={250}
                 options={{
                     maintianAspectRatio: false
                 }}
@@ -62,6 +77,8 @@ export function HorizontalbarChart(props) {
         <div className="barChart">
             <HorizontalBar
                 data={props.data}
+                width={400}
+                height={250}
                 options={{
                     maintianAspectRatio: false
                 }}
