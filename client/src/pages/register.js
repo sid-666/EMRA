@@ -17,7 +17,7 @@ function Register() {
                     password: registerPassword,
                 },
                 withCredentials: true,
-                url: "http://localhost:3001/api/auth/login",
+                url: "http://localhost:3001/api/auth/register",
             })
             history.push("/login");
         } catch (err) {
